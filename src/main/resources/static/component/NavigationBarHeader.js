@@ -1,3 +1,5 @@
+import Vue from "/js/vue.js";
+
 const template=`
 <div class="layui-header">
     <div class="layui-logo">{{systemName}}</div>
@@ -32,8 +34,8 @@ const template=`
 </div>
 `;
 
-export const componentName="navigation-bar-header";
-export default {
+export const NavigationBarHeader = "navigation-bar-header";
+Vue.component(NavigationBarHeader, {
     template:template,
     data: () => ({
         systemName:GLOBAL.ApplicationName,
@@ -42,9 +44,7 @@ export default {
             {name:"商品管理",href:""},
             {name:"用户",href:""},
         ],
-        rightMenus:[
-
-        ]
+        rightMenus:[]
     }),
     props:{
         isLogin: Boolean
@@ -53,6 +53,5 @@ export default {
         layui.use('element', function(){
         });
     }
-}
-
-
+});
+export default NavigationBarHeader
