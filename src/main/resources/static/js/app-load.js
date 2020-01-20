@@ -6,7 +6,7 @@ const cssList = [
 
 const libList = [
     "/js/global.js",
-    "/js/layui.js",
+    "/layui.js",
 ];
 
 ////////////---加载文件---////////////////////

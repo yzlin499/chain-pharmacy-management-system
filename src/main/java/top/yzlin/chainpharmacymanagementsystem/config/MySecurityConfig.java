@@ -4,9 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.web.bind.annotation.RestController;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -15,8 +13,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //定制请求的授权规则
-//        http.authorizeRequests().antMatchers("/").permitAll();
-//                .antMatchers("/level1/**").hasRole("VIP1")
+        http.authorizeRequests().antMatchers("/").permitAll()
+                .antMatchers("/cpms/**").hasRole("USER");
 //                .antMatchers("/level2/**").hasRole("VIP2")
 //                .antMatchers("/level3/**").hasRole("VIP3");
 
@@ -42,6 +40,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("q1w2e3r4").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("admin").password("q1w2e3r4").roles("USER");
     }
 }
