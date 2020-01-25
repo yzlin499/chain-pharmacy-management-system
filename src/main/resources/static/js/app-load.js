@@ -5,8 +5,9 @@ const cssList = [
 ];
 
 const libList = [
-    "/js/global.js",
+    "/js/axios.min.js",
     "/layui.js",
+    "/js/global.js",
 ];
 
 ////////////---加载文件---////////////////////

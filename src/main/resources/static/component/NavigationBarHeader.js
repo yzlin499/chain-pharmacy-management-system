@@ -15,10 +15,10 @@ const template=`
         </li>
     </ul>
     
-    <ul class="layui-nav layui-layout-right" v-if="isLogin">
+    <ul class="layui-nav layui-layout-right" v-if="user.isLogin">
         <li class="layui-nav-item">
             <a href="javascript:;">
-                <img :src="user.image" class="layui-nav-img">{{user.name}}
+                <img :src="user.data.image" class="layui-nav-img">{{user.data.name}}
             </a>
             <dl class="layui-nav-child">
                 <dd v-for="i in rightMenus"><a :href="i.href">{{i.name}}</a></dd>
@@ -36,7 +36,7 @@ export const NavigationBarHeader = "navigation-bar-header";
 Vue.component(NavigationBarHeader, {
     template:template,
     data: () => ({
-        loginPath:"",
+        loginPath: "/user/login",
         registeredPath:"",
         systemName:GLOBAL.ApplicationName,
         leftMenus:[
@@ -53,22 +53,20 @@ Vue.component(NavigationBarHeader, {
         rightMenus:[
             {name:"控制台",href:""},
             {name:"商品管理",href:""},
-            {name:"退出登录",href:""},
+            {name: "退出登录", href: "/user/logout"},
         ],
         user:{
-            name:"测试名",
-            username:"yyyyy",
-            image:"//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
+            isLogin: false,
+            data: {
+                name: "",
+                username: "",
+                image: ""
+            }
         }
     }),
-    props:{
-        isLogin: {
-            type:Boolean,
-            default:false
-        }
-    },
-    created:()=>{
-        layui.use('element', function(){});
+    created: function () {
+        layui.use('element');
+        layui.use("jquery", () => layui.jquery.get("/user", re => Vue.set(this, "user", re)));
     }
 });
 export default NavigationBarHeader

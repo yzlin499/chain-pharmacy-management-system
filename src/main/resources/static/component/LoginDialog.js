@@ -18,10 +18,15 @@ const template = `<div class="layui-card">
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
+            <div v-if="errMsg" class="layui-form-item layui-anim layui-anim-fadein">
+                <div class="layui-input-block">
+                    <blockquote class="layui-elem-quote" style="border-left: 5px solid #ff6577">{{errMsg}}</blockquote>
+                </div>
+            </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="login">登录</button>
-                    <button type="button" class="layui-btn layui-btn-primary">注册</button>
+                    <button class="layui-btn layui-col-xs3 layui-col-xs-offset3" lay-submit lay-filter="login">登录</button>
+                    <button type="button" class="layui-btn layui-btn-primary layui-col-xs3">注册</button>
                 </div>
             </div>
         </div>
@@ -33,15 +38,23 @@ const template = `<div class="layui-card">
 export const LoginDialog = "login-dialog";
 Vue.component(LoginDialog, {
     template: template,
-    data: () => ({}),
+    data: () => ({
+        errMsg: false
+    }),
     props: {},
-    created: () => {
-        layui.use('form', function () {
-            layui.form.on('submit(login)', function(data){
-                console.log(data.field);
+    created: function () {
+        layui.use('form', () =>
+            layui.form.on('submit(login)', data => {
+                layui.jquery.post("/user/login", data.field, response => {
+                    if (response.isLogin) {
+                        window.location.href = "/cpms/index.html"
+                    } else {
+                        this.errMsg = "登录失败"
+                    }
+                });
                 return false;
-            });
-        });
+            })
+        );
     }
 });
 export default LoginDialog
