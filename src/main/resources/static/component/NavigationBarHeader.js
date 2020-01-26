@@ -66,7 +66,7 @@ Vue.component(NavigationBarHeader, {
     }),
     created: function () {
         layui.use('element');
-        layui.use("jquery", () => layui.jquery.get("/user", re => Vue.set(this, "user", re)));
+        layui.use("jquery", () => layui.jquery.get("/api/user", re => Vue.set(this, "user", re)));
     }
 });
 export default NavigationBarHeader

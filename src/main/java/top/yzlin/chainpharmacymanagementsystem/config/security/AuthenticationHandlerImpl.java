@@ -1,6 +1,5 @@
 package top.yzlin.chainpharmacymanagementsystem.config.security;
 
-import com.alibaba.fastjson.JSON;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -21,13 +20,13 @@ public class AuthenticationHandlerImpl implements AuthenticationSuccessHandler, 
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException, ServletException {
-        httpServletResponse.sendRedirect("/user");
+        httpServletResponse.sendRedirect("/api/user");
     }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
                                         AuthenticationException e) throws IOException, ServletException {
-        httpServletResponse.sendRedirect("/user");
+        httpServletResponse.sendRedirect("/api/user");
     }
 }

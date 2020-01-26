@@ -31,7 +31,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         //定制请求的授权规则
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/user**").permitAll()
                 .antMatchers("/cpms/**").hasRole("ADMIN")
                 .and()
                 //登录配置

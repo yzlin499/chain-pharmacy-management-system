@@ -1,7 +1,8 @@
 package top.yzlin.chainpharmacymanagementsystem.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,7 +20,8 @@ public class User implements UserDetails {
     private Long id;
     private String name;
     private String username;
-    @JSONField(serialize = false)
+
+    @JsonIgnore
     private String password;
     private String image;
 
