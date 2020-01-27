@@ -45,7 +45,7 @@ Vue.component(LoginDialog, {
     created: function () {
         layui.use('form', () =>
             layui.form.on('submit(login)', data => {
-                layui.jquery.post("/user/login", data.field, response => {
+                layui.jquery.post("/api/user/login", data.field, response => {
                     if (response.isLogin) {
                         window.location.href = "/cpms/index.html"
                     } else {

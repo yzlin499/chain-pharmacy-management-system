@@ -1,5 +1,6 @@
 import Vue from "/js/vue.js";
 
+// language=Vue
 const template = `
 <div class="layui-side layui-bg-black">
     <div class="layui-side-scroll">

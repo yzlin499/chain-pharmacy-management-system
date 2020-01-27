@@ -15,17 +15,22 @@ const template = `
     </div>
 `;
 
+
 export const appName = "cpms-index";
 export default {
     template: template,
     data: () => ({}),
     methods: {
         onNavSelect: function (comp, name) {
-            this.$emit('tabEvent', {
-                id: comp,
-                title: name,
-                content: comp,
+            import("/component/" + comp + ".js").then(mod => {
+                this.$emit('tabEvent', {
+                    id: comp,
+                    title: name,
+                    content: `<${mod[comp]}></${mod[comp]}>`,
+                });
             });
+
+
         },
         onTabDelete: function (data) {
 

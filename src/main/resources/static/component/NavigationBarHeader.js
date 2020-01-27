@@ -53,7 +53,7 @@ Vue.component(NavigationBarHeader, {
         rightMenus:[
             {name:"控制台",href:""},
             {name:"商品管理",href:""},
-            {name: "退出登录", href: "/user/logout"},
+            {name: "退出登录", href: "/api/user/logout"},
         ],
         user:{
             isLogin: false,

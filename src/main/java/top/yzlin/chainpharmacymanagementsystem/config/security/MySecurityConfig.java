@@ -34,12 +34,12 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/cpms/**").hasRole("ADMIN")
                 .and()
                 //登录配置
-                .formLogin().loginPage("/login.html").loginProcessingUrl("/user/login")
+                .formLogin().loginPage("/login.html").loginProcessingUrl("/api/user/login")
                 .failureHandler(authenticationHandler)
                 .successHandler(authenticationHandler)
                 .and()
                 .logout()
-                .logoutUrl("/user/logout")
+                .logoutUrl("/api/user/logout")
                 .logoutSuccessUrl("/")
                 .deleteCookies("JSESSIONID")
                 //关闭csrf
