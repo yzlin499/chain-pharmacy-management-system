@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import top.yzlin.chainpharmacymanagementsystem.entity.Medicine;
 
 @Repository
-@RestResource(exported = false)
 public interface MedicineDAO extends JpaRepository<Medicine, Long> {
 }

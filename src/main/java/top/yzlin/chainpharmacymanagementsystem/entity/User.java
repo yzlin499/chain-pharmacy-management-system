@@ -2,17 +2,16 @@ package top.yzlin.chainpharmacymanagementsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.data.rest.core.annotation.RestResource;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Data
 public class User implements UserDetails {
+    @LayuiTableField(enable = false)
     public static final String ADMIN = "ADMIN";
 
     @Id

@@ -6,5 +6,5 @@ import lombok.Data;
 public class Store {
     private Integer id;
     private String name;
-    private String describe;
+    private String des;
 }
