@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import top.yzlin.chainpharmacymanagementsystem.entity.User;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableFieldImpl;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableHeader;
@@ -15,13 +14,14 @@ import java.util.*;
 
 @RestController
 public class TableFieldController {
-    private Map<String, ObjectNode> nodeMap = new HashMap<>();
+    private Map<String, ObjectNode> tableNodeMap = new HashMap<>();
+    private Map<String, ObjectNode> formNodeMap = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping("/api/tableField/{table}")
     public ObjectNode getTableField(@PathVariable("table") String tableName) {
-        if (nodeMap.containsKey(tableName)) {
-            return nodeMap.get(tableName);
+        if (tableNodeMap.containsKey(tableName)) {
+            return tableNodeMap.get(tableName);
         }
         char[] chars = tableName.toCharArray();
         chars[0] = Character.toUpperCase(chars[0]);
@@ -57,11 +57,11 @@ public class TableFieldController {
         } catch (ClassNotFoundException e) {
             objectNode.put("status", 404);
         }
-        nodeMap.put(tableName, objectNode);
+        tableNodeMap.put(tableName, objectNode);
         return objectNode;
     }
 
-    public ObjectNode layuiTableFieldConversion(LayuiTableField ltf, Field field) {
+    private ObjectNode layuiTableFieldConversion(LayuiTableField ltf, Field field) {
         ObjectNode node = objectMapper.createObjectNode();
         node.put("title", "".equals(ltf.value()) ? field.getName() : ltf.value());
         node.put("field", "".equals(ltf.field()) ? field.getName() : ltf.field());
@@ -75,4 +75,8 @@ public class TableFieldController {
         return node;
     }
 
+    @GetMapping("/api/formField/{table}")
+    public ObjectNode getFormField(@PathVariable("table") String tableName) {
+        return null;
+    }
 }

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -19,6 +20,7 @@ public class Medicine {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "medicine-uuid")
     @GenericGenerator(name = "medicine-uuid", strategy = "top.yzlin.chainpharmacymanagementsystem.idgenerator.MedicineIdentityGenerator")
     @LayuiTableField("条形码ID")
+    @NotNull(message = "条形码不能为空")
     private Long id;
     @LayuiTableField(value = "药品名称", edit = LayuiTableField.EDIT_TYPE_TEXT)
     private String name;

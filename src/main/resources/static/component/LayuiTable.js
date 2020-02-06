@@ -6,8 +6,8 @@ const template = `
         <table class="layui-hide" :id="tableName+'Data'" :lay-filter="tableName+'Filter'"></table>
         <script type="text/html" :id="tableName+'Toolbar'">
             <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-sm">添加数据</button>
-                <button class="layui-btn layui-btn-sm">删除选中数据</button>
+                <button class="layui-btn layui-btn-sm" lay-event="addData">添加数据</button>
+                <button class="layui-btn layui-btn-sm" lay-event="deleteDataBySelect">删除选中数据</button>
                 <!--                <div class="layui-inline">-->
                 <!--                    <input class="layui-input" name="id" id="demoReload" autocomplete="off">-->
                 <!--                </div>-->
@@ -25,7 +25,8 @@ Vue.component(LayuiTable, {
     data: () => ({}),
     props: {
         tableName: String,
-        apiName: String
+        apiName: String,
+        addDataObject: Object
     },
     created: function () {
         let api = this.apiName ? "/api/" + this.apiName : "/api/" + this.tableName + "s";
@@ -68,6 +69,32 @@ Vue.component(LayuiTable, {
                             layer.msg("数据删除失败");
                             console.log(error);
                         });
+                    }
+                });
+
+                let openUI = {
+                    type: 2,
+                    title: '标题',
+                    area: ['390px', '260px'],
+                    shade: 0,
+                    maxmin: true,
+                    content: '',
+                    btn: ['保存', '取消'],
+                    yes: () => {
+                    },
+                    btn2: () => {
+                    },
+                    zIndex: layer.zIndex,
+                    success: layero => layer.setTop(layero)
+                };
+                if (this.addDataObject) {
+                    for (let addDataObjectKey in this.addDataObject) {
+                        openUI[addDataObjectKey] = this.addDataObject[addDataObjectKey];
+                    }
+                }
+                layui.table.on(`toolbar(${this.tableName}Filter)`, obj => {
+                    if (obj.event === 'addData') {
+                        layer.open(openUI);
                     }
                 });
             });
