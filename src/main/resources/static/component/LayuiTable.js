@@ -1,19 +1,21 @@
 import Vue from "/js/vue.js"
+import LayuiForm from "/component/LayuiForm.js";
 
 // language=HTML
 const template = `
     <div>
         <table class="layui-hide" :id="tableName+'Data'" :lay-filter="tableName+'Filter'"></table>
-        <script type="text/html" :id="tableName+'Toolbar'">
+        <div :id="tableName+'Toolbar'" style="display:none">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-sm" lay-event="addData">添加数据</button>
                 <button class="layui-btn layui-btn-sm" lay-event="deleteDataBySelect">删除选中数据</button>
-                <!--                <div class="layui-inline">-->
-                <!--                    <input class="layui-input" name="id" id="demoReload" autocomplete="off">-->
-                <!--                </div>-->
-                <!--                <button class="layui-btn layui-btn-sm" data-type="reload">搜索</button>-->
+                <div class="layui-inline" style="margin-bottom: 10px;margin-right: 10px;">
+                    <input class="layui-input layui-btn-sm" style="height: 30px;" :id="tableName+'SearchKey'"
+                           autocomplete="off">
+                </div>
+                <button class="layui-btn layui-btn-sm" lay-event="searchData">搜索</button>
             </div>
-        </script>
+        </div>
         <script type="text/html" :id="tableName+'Bar'">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dataDel">删除</a>
         </script>
@@ -30,9 +32,9 @@ Vue.component(LayuiTable, {
     },
     created: function () {
         let api = this.apiName ? "/api/" + this.apiName : "/api/" + this.tableName + "s";
-        layui.use(['jquery', 'table'], () => {
+        layui.use(['jquery', 'table', 'layer'], () => {
             layui.jquery.get("/api/tableField/" + this.tableName, data => {
-                layui.table.render({
+                let tableObj = layui.table.render({
                     elem: `#${this.tableName}Data`,
                     url: api,
                     parseData: (res) => ({
@@ -44,13 +46,16 @@ Vue.component(LayuiTable, {
                     request: {limitName: 'size'},
                     toolbar: `#${this.tableName}Toolbar`,
                     defaultToolbar: ['filter', 'exports', 'print'],
+                    autoSort: false,
                     cols: [data.data],
                     page: true,
-                    height: 'full-250'
+                    height: 'full-250',
+                    limit: 15,
+                    limits: [15, 30, 45, 60]
                 });
-                layui.table.on(`edit(${this.tableName}Filter)`, obj => axios.post(api, obj.data)
+                layui.table.on(`edit(${this.tableName}Filter)`, obj => axios.put(api + "/" + obj.data.id, obj.data)
                     .then(response => {
-                        if (response.status === 201) {
+                        if (response.status === 200) {
                             layer.msg("数据修改成功");
                         }
                     }).catch(function (error) {
@@ -72,20 +77,46 @@ Vue.component(LayuiTable, {
                     }
                 });
 
+                layui.table.on(`sort(${this.tableName}Filter)`, obj => tableObj.reload({
+                    initSort: obj,
+                    where: {
+                        sort: obj.type ? (obj.field + "," + obj.type) : ""
+                    }
+                }));
+
+
                 let openUI = {
-                    type: 2,
+                    id: `${this.tableName}Form`,
+                    type: 1,
                     title: '标题',
-                    area: ['390px', '260px'],
+                    area: ['500px', '400px'],
                     shade: 0,
                     maxmin: true,
-                    content: '',
+                    content: `<div id="${this.tableName}Form"><layui-form table-name="${this.tableName}"></layui-form></div>`,
                     btn: ['保存', '取消'],
-                    yes: () => {
+                    yes: (index, layero) => {
+                        let val = layui.form.val(`${this.tableName}Form`);
+                        axios.post(api, val).then(response => {
+                            console.log(response);
+                            if (response.status === 201) {
+                                layer.msg("数据添加成功");
+                            }
+                            tableObj.reload();
+                        }).catch(function (error) {
+                            layer.msg("数据添加失败");
+                            console.log(error);
+                        });
+                        layer.close(index);
                     },
-                    btn2: () => {
+                    vueObj: null,
+                    zIndex: layui.layer.zIndex,
+                    success: layero => {
+                        layer.setTop(layero);
+                        openUI.vueObj = new Vue({el: `#${this.tableName}Form`})
                     },
-                    zIndex: layer.zIndex,
-                    success: layero => layer.setTop(layero)
+                    end: () => {
+                        openUI.vueObj.$destroy();
+                    }
                 };
                 if (this.addDataObject) {
                     for (let addDataObjectKey in this.addDataObject) {
@@ -95,6 +126,19 @@ Vue.component(LayuiTable, {
                 layui.table.on(`toolbar(${this.tableName}Filter)`, obj => {
                     if (obj.event === 'addData') {
                         layer.open(openUI);
+                    } else if (obj.event === 'searchData') {
+                        let val = layui.jquery(`#${this.tableName}SearchKey`).val();
+                        if (val !== "") {
+                            tableObj.reload({
+                                url: `${api}/search/common`,
+                                where: {k: val}
+                            })
+                        } else {
+                            tableObj.reload({
+                                url: api
+                            })
+                        }
+
                     }
                 });
             });

@@ -3,6 +3,7 @@ package top.yzlin.chainpharmacymanagementsystem.entity;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.rest.core.annotation.RestResource;
+import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiFormField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableHeader;
 
@@ -22,11 +23,15 @@ public class Medicine {
     @LayuiTableField("条形码ID")
     @NotNull(message = "条形码不能为空")
     private Long id;
+
     @LayuiTableField(value = "药品名称", edit = LayuiTableField.EDIT_TYPE_TEXT)
     private String name;
+
     @LayuiTableField("制药厂")
+    @LayuiFormField(placeholder = "厂家")
     private String brand;
     @LayuiTableField("描述")
+    @LayuiFormField(type = LayuiFormField.TYPE_TEXTAREA)
     private String des;
     @LayuiTableField("参考价格")
     private Integer price;
