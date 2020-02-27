@@ -34,6 +34,6 @@ public class Medicine {
     @LayuiFormField(type = LayuiFormField.TYPE_TEXTAREA)
     private String des;
     @LayuiTableField("参考价格")
-    private Integer price;
+    private Double price;
 
 }

@@ -2,6 +2,7 @@ package top.yzlin.chainpharmacymanagementsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.userdetails.UserDetails;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 
@@ -24,7 +25,8 @@ public class User implements UserDetails {
     private String password;
     private String image;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> authorities;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;

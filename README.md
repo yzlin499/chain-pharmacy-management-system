@@ -21,3 +21,10 @@
 这个可能是我最后一个java项目了，以后估计再写项目就不是java了吧。（转行做游戏了）
 
 有空继续更readme
+
+|component| |
+|---|---| 
+|LayuiForm|通用数据表单|
+|LayuiTable|通用数据表格|
+|NavigationBarHeader|头顶导航栏|
+|NavigationBarLeftSide|左侧导航栏|

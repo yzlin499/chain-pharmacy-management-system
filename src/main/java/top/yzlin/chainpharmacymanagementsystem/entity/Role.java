@@ -14,5 +14,6 @@ public class Role implements GrantedAuthority {
     @GeneratedValue
     private Integer id;
     private String authority;
+    private String name;
 
 }
