@@ -1,5 +1,3 @@
-const GLOBAL={
-    ApplicationName:"连锁药店管理系统"
-
-
+const GLOBAL = {
+    ApplicationName: "连锁药店管理系统"
 };
