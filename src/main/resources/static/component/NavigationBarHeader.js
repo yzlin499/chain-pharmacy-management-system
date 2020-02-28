@@ -41,18 +41,17 @@ Vue.component(NavigationBarHeader, {
         systemName:GLOBAL.ApplicationName,
         leftMenus:[
             {name:"控制台",href:""},
-            {name:"商品管理",href:""},
+            {name: "活动界面", href: ""},
             {
-                name:"用户",
+                name: "常用功能",
                 href:"",
                 child:[
-                    {name:"商品管理",href:""},
+                    {name: "签到", href: ""},
                 ]
             },
         ],
         rightMenus:[
             {name:"控制台",href:""},
-            {name:"商品管理",href:""},
             {name: "退出登录", href: "/api/user/logout"},
         ],
         user:{

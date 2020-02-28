@@ -1,7 +1,6 @@
 package top.yzlin.chainpharmacymanagementsystem.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 
 import javax.persistence.*;
