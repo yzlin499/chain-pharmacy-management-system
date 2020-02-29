@@ -23,8 +23,8 @@ public class LayuiTableFieldImpl implements LayuiTableField {
     }
 
     @Override
-    public int width() {
-        return 0;
+    public String width() {
+        return "";
     }
 
     @Override

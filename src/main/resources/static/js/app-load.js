@@ -1,16 +1,22 @@
 import Vue from "/js/vue.js";
 
+//////////////---[[--配置头--]]---//////////////
+
+////////////---加载文件---////////////////////
 const cssList = [
-    "/css/layui.css"
+    "/css/layui.css",
+    "/css/easy-editor.css",
+    "/css/icon.css"
 ];
 
 const libList = [
+    "/js/marked.min.js",
     "/js/axios.min.js",
     "/layui.js",
     "/js/global.js",
 ];
 
-////////////---加载文件---////////////////////
+////////////---加载文件顺序---////////////////////
 let loadObj = [
     {
         loadList: cssList,
@@ -27,7 +33,9 @@ let loadObj = [
     }
 ];
 
-////////////////////////////////
+//////////////---[[--配置尾--]]---//////////////
+
+////////////---不能动就对了---////////////////////
 let listLength = 1;
 let loadObjIndex = -1;
 LoadOver();

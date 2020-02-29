@@ -1,7 +1,6 @@
 package top.yzlin.chainpharmacymanagementsystem.config.security;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,7 +30,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         //定制请求的授权规则
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/cpms/**").hasRole("ADMIN")
+                .antMatchers("/cpms/**").hasAnyRole("ADMIN", "WAREHOUSE_KEEPER")
                 .and()
                 //登录配置
                 .formLogin().loginPage("/login.html").loginProcessingUrl("/api/user/login")

@@ -30,8 +30,8 @@ Vue.component(NavigationBarLeftSide, {
             {
                 name: "公告",
                 child: [
-                    {name: "公告", comp: "LoginDialog"},
-                    {name: "公告发布", comp: "NavigationBarHeader"},
+                    {name: "公告列表", comp: "NoticeList"},
+                    {name: "公告发布", comp: "NoticePublish"},
                     {name: "商店信息", comp: "StoreInfo"},
                     {name: "个人信息", comp: "NavigationBarHeader"},
                 ]
@@ -48,7 +48,7 @@ Vue.component(NavigationBarLeftSide, {
                 name: "药品管理",
                 child: [
                     {name: "零售账单", comp: "NavigationBarHeader"},
-                    {name: "库存管理", comp: "NavigationBarHeader"},
+                    {name: "库存管理", comp: "GoodsManagement"},
                     {name: "药品信息管理", comp: "MedicineManagement"},
                 ]
             },
@@ -67,7 +67,6 @@ Vue.component(NavigationBarLeftSide, {
                     {name: "商店管理", comp: "NavigationBarHeader"},
                 ]
             }
-
         ],
     }),
     props: {

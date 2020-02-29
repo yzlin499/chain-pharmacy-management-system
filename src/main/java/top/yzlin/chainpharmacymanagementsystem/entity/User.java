@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.userdetails.UserDetails;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -32,6 +29,7 @@ public class User implements UserDetails {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "store_id")
+    @JsonIgnoreProperties(ignoreUnknown = true, value = {"employees"})
     private Store store;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
