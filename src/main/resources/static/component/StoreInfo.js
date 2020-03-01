@@ -1,4 +1,5 @@
 import Vue from "/js/vue.js";
+import LoggerShow from "/component/LoggerShow.js";
 
 // language=Vue
 const template = `
@@ -29,29 +30,13 @@ const template = `
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">商店重大事件</h2>
                 <div class="layui-colla-content layui-show">
-                    <ul class="layui-timeline" v-for="i in storeLogger">
-                        <li class="layui-timeline-item">
-                            <i class="layui-icon layui-timeline-axis"></i>
-                            <div class="layui-timeline-content layui-text">
-                                <h3 class="layui-timeline-title">{{i.date}}</h3>
-                                <p>{{i.content}}</p>
-                            </div>
-                        </li>
-                    </ul>
+                    <logger-show :loggerData="storeLogger"></logger-show>
                 </div>
             </div>
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">商店人员变动事件</h2>
                 <div class="layui-colla-content layui-show">
-                    <ul class="layui-timeline" v-for="i in employeesChangeLogger">
-                        <li class="layui-timeline-item">
-                            <i class="layui-icon layui-timeline-axis"></i>
-                            <div class="layui-timeline-content layui-text">
-                                <h3 class="layui-timeline-title">{{i.date}}</h3>
-                                <p>{{i.content}}</p>
-                            </div>
-                        </li>
-                    </ul>
+                    <logger-show :loggerData="employeesChangeLogger"></logger-show>
                 </div>
             </div>
         </div>

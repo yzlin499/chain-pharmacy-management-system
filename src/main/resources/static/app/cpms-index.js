@@ -27,8 +27,7 @@ export default {
         indexTab: {
             id: "index",
             title: "首页",
-            content: `
-        <store-info></store-info>`,
+            content: `首页`,
             isComponent: false
         }
     }),

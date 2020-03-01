@@ -2,10 +2,12 @@ package top.yzlin.chainpharmacymanagementsystem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import top.yzlin.chainpharmacymanagementsystem.dao.GoodsDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.MedicineDAO;
@@ -43,6 +45,16 @@ public class GoodsController {
                                 @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         return JsonTools.customResultData("goods", goodsDAO.findAllByStoreId(storeId,
                 JpaTools.createPageable(page, size, sort)).map(PassGoods::new));
+    }
+
+    @GetMapping("/api/storeGoods/{storeId}/goods/search/common")
+    public ObjectNode commonSearch(@PathVariable("storeId") Integer storeId,
+                                   @RequestParam(value = "k", required = false, defaultValue = "") String k,
+                                   @RequestParam(value = "sort", required = false) String sort,
+                                   @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                   @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        return JsonTools.customResultData("goods",
+                goodsDAO.commonSearchByStoreId(storeId, k, JpaTools.createPageable(page, size, sort)).map(PassGoods::new));
     }
 
     @PostMapping("/api/storeGoods/{storeId}/goods")

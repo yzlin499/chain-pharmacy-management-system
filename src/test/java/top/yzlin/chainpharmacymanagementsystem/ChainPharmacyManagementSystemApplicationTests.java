@@ -41,12 +41,8 @@ class ChainPharmacyManagementSystemApplicationTests {
 
     @Test
     void testBean() {
-        Page<PassGoods> allByStoreId = goodsDAO.findAllByStoreId(16, PageRequest.of(1, 10)).map(PassGoods::new);
-        System.out.println(allByStoreId.getSize());
-        System.out.println(allByStoreId.getTotalElements());
-        System.out.println(allByStoreId.getTotalPages());
-        System.out.println(allByStoreId.getNumber());
-        System.out.println(allByStoreId.toList());
+        Page<Goods> goods = goodsDAO.commonSearchByStoreId(16, "123", PageRequest.of(0, 10));
+        goods.toList().forEach(System.out::println);
     }
 
 }
