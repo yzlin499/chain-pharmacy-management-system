@@ -17,4 +17,6 @@ public interface GoodsDAO extends JpaRepository<Goods, Long> {
             "and (m.medicine.id like CONCAT('%',:k,'%') " +
             "or m.medicine.name like CONCAT('%',:k,'%'))")
     Page<Goods> commonSearchByStoreId(@Param("storeId") Integer storeId, @Param("k") String k, Pageable p);
+
+
 }

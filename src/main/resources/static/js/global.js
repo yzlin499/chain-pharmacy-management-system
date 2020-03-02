@@ -11,7 +11,7 @@ const BarLeft = [
         name: "销售面板",
         child: [
             {name: "商品销售", comp: "SalesPanel"},
-            {name: "会员管理", comp: "NavigationBarHeader"},
+            {name: "会员管理", comp: "CustomerManagement"},
             {name: "销售记录", comp: "NavigationBarHeader"},
         ]
     },
