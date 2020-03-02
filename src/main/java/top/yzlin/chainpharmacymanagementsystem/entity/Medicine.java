@@ -2,7 +2,6 @@ package top.yzlin.chainpharmacymanagementsystem.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.rest.core.annotation.RestResource;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiFormField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableHeader;

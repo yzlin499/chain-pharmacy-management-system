@@ -18,7 +18,7 @@ public @interface LayuiTableField {
 
     boolean enable() default true;
 
-    int width() default 0;
+    String width() default "";
 
     int minWidth() default 60;
 

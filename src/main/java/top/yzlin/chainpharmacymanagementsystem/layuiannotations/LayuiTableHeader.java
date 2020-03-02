@@ -15,5 +15,9 @@ public @interface LayuiTableHeader {
     String TYPE_NUMBERS = "numbers";
     String TYPE_SPACE = "space";
 
-    String type() default TYPE_NORMAL;
+    String tableName() default "";
+
+    String type() default "";
+
+    boolean isCanDelete() default true;
 }

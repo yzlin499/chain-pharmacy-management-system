@@ -9,9 +9,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 import top.yzlin.chainpharmacymanagementsystem.entity.Medicine;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
-
 @Repository
 public interface MedicineDAO extends JpaRepository<Medicine, Long> {
 

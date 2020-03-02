@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import top.yzlin.chainpharmacymanagementsystem.entity.Medicine;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.*;
 import top.yzlin.tools.StringTools;
 
@@ -32,7 +31,7 @@ public class LayuiFieldController {
             Class<?> aClass = Class.forName("top.yzlin.chainpharmacymanagementsystem.entity." + upCaseTableName);
 
             LayuiTableHeader lth = aClass.getAnnotation(LayuiTableHeader.class);
-            if (lth != null) {
+            if (lth != null && !"".equals(lth.type())) {
                 ObjectNode node = objectMapper.createObjectNode();
                 node.put("type", lth.type());
                 fieldList.add(node);
@@ -47,11 +46,17 @@ public class LayuiFieldController {
                 }
                 fieldList.add(layuiTableFieldConversion(ltf, field));
             }
-            ObjectNode node = objectMapper.createObjectNode();
-            node.put("align", "center");
-            node.put("fixed", "right");
-            node.put("toolbar", "#" + tableName + "Bar");
-            fieldList.add(node);
+
+            if (lth == null || lth.isCanDelete()) {
+                String tn = Optional.ofNullable(lth).map(LayuiTableHeader::tableName).orElse("");
+                tn = "#" + ("".equals(tn) ? tableName : tn) + "Bar";
+                ObjectNode node = objectMapper.createObjectNode();
+                node.put("align", "center");
+                node.put("fixed", "right");
+                node.put("toolbar", tn);
+                fieldList.add(node);
+            }
+
             objectNode.putPOJO("data", fieldList);
         } catch (ClassNotFoundException e) {
             objectNode.put("status", 404);
@@ -64,12 +69,14 @@ public class LayuiFieldController {
         ObjectNode node = objectMapper.createObjectNode();
         node.put("title", "".equals(ltf.value()) ? field.getName() : ltf.value());
         node.put("field", "".equals(ltf.field()) ? field.getName() : ltf.field());
-        node.put("width", ltf.width());
         node.put("minWidth", ltf.minWidth());
         node.put("sort", ltf.sort());
         node.put("totalRow", ltf.totalRow());
         if (!"".equals(ltf.edit())) {
             node.put("edit", ltf.edit());
+        }
+        if (!"".equals(ltf.width())) {
+            node.put("width", ltf.width());
         }
         return node;
     }

@@ -19,17 +19,18 @@ export const LayuiForm = "layui-form";
 Vue.component(LayuiForm, {
     template: template,
     props: {
-        tableName: String
+        tableName: String,
+        apiField: String
     },
     data: () => ({
-        formItems: []
+        formItems: [],
     }),
     created: function () {
         if (layui.data('formField')[this.tableName]) {
             Vue.set(this, "formItems", layui.data('formField')[this.tableName])
         } else {
             layui.use('jquery', () => {
-                layui.jquery.get(`/api/formField/${this.tableName}`, res => {
+                layui.jquery.get(`/api/formField/${this.apiField}`, res => {
                     layui.data('formField', {key: this.tableName, value: res.data});
                     Vue.set(this, "formItems", res.data)
                 });

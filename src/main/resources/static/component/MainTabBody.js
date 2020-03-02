@@ -50,7 +50,6 @@ Vue.component(MainTabBody, {
             });
             this.tabEventNode.$emit('tabEvent', this.tab);
         });
-
     }
 });
 export default MainTabBody

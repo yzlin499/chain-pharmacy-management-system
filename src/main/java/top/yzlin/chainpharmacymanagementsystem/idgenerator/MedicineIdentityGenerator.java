@@ -3,7 +3,6 @@ package top.yzlin.chainpharmacymanagementsystem.idgenerator;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentityGenerator;
-import org.hibernate.id.UUIDGenerator;
 import top.yzlin.chainpharmacymanagementsystem.entity.Medicine;
 
 import java.io.Serializable;
