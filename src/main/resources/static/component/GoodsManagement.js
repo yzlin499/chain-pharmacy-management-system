@@ -25,6 +25,19 @@ Vue.component(GoodsManagement, {
     }),
     created: function () {
         this.apiData = `/api/storeGoods/${GLOBAL.LocalUser().data.store.id}/goods`;
+
+    },
+    methods: {
+        initFunction: () => layui.use('laydate', () => {
+            layui.laydate.render({
+                elem: layui.jquery(".goodsDateChoose")[0],
+                trigger: 'click',
+                value: new Date(),
+                done: (value, date) => {
+
+                }
+            })
+        })
     }
 });
 

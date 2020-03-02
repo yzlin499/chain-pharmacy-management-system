@@ -31,6 +31,9 @@ public class SalesOrder {
     @ManyToOne
     private Store store;
 
+    private Double total;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<SalesOrderCell> salesOrderCellList;
+
 }

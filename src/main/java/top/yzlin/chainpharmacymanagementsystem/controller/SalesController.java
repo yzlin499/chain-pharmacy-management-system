@@ -1,20 +1,22 @@
 package top.yzlin.chainpharmacymanagementsystem.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.yzlin.chainpharmacymanagementsystem.dao.CustomerDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.GoodsDAO;
-import top.yzlin.chainpharmacymanagementsystem.dao.MedicineDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.SalesOrderDAO;
 import top.yzlin.chainpharmacymanagementsystem.entity.*;
+import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassGoods;
+import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassOrderRequest;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassSalesOrder;
 import top.yzlin.chainpharmacymanagementsystem.httpstatus.BadRequestException;
 import top.yzlin.chainpharmacymanagementsystem.httpstatus.ForbiddenException;
+import top.yzlin.tools.JpaTools;
+import top.yzlin.tools.JsonTools;
 
 import java.util.Date;
 import java.util.Optional;
@@ -42,21 +44,22 @@ public class SalesController {
     }
 
     @PostMapping("/api/salesOrders")
-    public ResponseEntity<SalesOrder> createOrder(@RequestBody PassSalesOrder passSalesOrder) {
+    public ResponseEntity<SalesOrder> createOrder(@RequestBody PassOrderRequest passOrderRequest) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
             User user = (User) principal;
             Date date = new Date();
             Customer byPhone = null;
-            if (!"".equals(Optional.ofNullable(passSalesOrder.getCustomerPhone()).orElse(""))) {
-                byPhone = customerDAO.findByPhone(passSalesOrder.getCustomerPhone());
+            if (!"".equals(Optional.ofNullable(passOrderRequest.getCustomerPhone()).orElse(""))) {
+                byPhone = customerDAO.findByPhone(passOrderRequest.getCustomerPhone());
             }
             SalesOrder salesOrder = new SalesOrder();
             salesOrder.setCustomer(byPhone);
             salesOrder.setOperateUser(user);
+            salesOrder.setTotal(0D);
             salesOrder.setDate(date);
             Customer finalByPhone = byPhone;
-            salesOrder.setSalesOrderCellList(passSalesOrder.getOrderMap().entrySet().stream()
+            salesOrder.setSalesOrderCellList(passOrderRequest.getOrderMap().entrySet().stream()
                     .map(e -> goodsDAO.findById(Long.parseLong(e.getKey())).map(goods -> {
                         if (goods.getCount() < e.getValue()) {
                             SalesOrderCell orderCell = new SalesOrderCell();
@@ -66,6 +69,7 @@ public class SalesController {
                             orderCell.setDate(date);
                             orderCell.setCount(e.getValue());
                             orderCell.setMedicine(goods.getMedicine());
+                            salesOrder.setTotal(orderCell.getCount() * goods.getPrice() + salesOrder.getTotal());
                             goods.setCount(goods.getCount() - e.getValue());
                             goodsDAO.save(goods);
                             return orderCell;
@@ -76,6 +80,48 @@ public class SalesController {
                     .collect(Collectors.toSet()));
             salesOrder.setStore(user.getStore());
             return new ResponseEntity<>(salesOrderDAO.save(salesOrder), HttpStatus.CREATED);
+        }
+        throw new ForbiddenException();
+    }
+
+    @GetMapping("/api/storeGoods")
+    public ObjectNode findGoods(@RequestParam(value = "sort", required = false) String sort,
+                                @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            User user = (User) principal;
+            return JsonTools.customResultData("storeGoods", salesOrderDAO
+                    .findAllByStoreId(user.getStore().getId(), JpaTools.createPageable(page, size, sort)).map(PassSalesOrder::new));
+        }
+        throw new ForbiddenException();
+    }
+
+    @GetMapping("/api/salesOrders/search/common")
+    public ObjectNode searchCommon(@RequestParam(value = "k", required = false, defaultValue = "") String k,
+                                   @RequestParam(value = "sort", required = false) String sort,
+                                   @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                   @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            User user = (User) principal;
+            return JsonTools.customResultData("salesOrders",
+                    salesOrderDAO.commonSearch(k, user.getStore().getId(), JpaTools.createPageable(page, size, sort)).map(PassSalesOrder::new));
+        }
+        throw new ForbiddenException();
+    }
+
+    @GetMapping("/api/salesOrders/search/date/{date}")
+    public ObjectNode findByDate(@PathVariable("date") String date,
+                                 @RequestParam(value = "sort", required = false) String sort,
+                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                                 @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            User user = (User) principal;
+            return JsonTools.customResultData("storeGoods",
+                    salesOrderDAO.findByDate(date, user.getStore().getId(), JpaTools.createPageable(page, size, sort)).map(PassSalesOrder::new));
         }
         throw new ForbiddenException();
     }
