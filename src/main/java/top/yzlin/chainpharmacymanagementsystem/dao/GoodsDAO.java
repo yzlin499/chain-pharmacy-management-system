@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import top.yzlin.chainpharmacymanagementsystem.entity.Goods;
 
+import javax.validation.constraints.NotNull;
+
 @Repository
 public interface GoodsDAO extends JpaRepository<Goods, Long> {
     Page<Goods> findAllByStoreId(Integer storeId, Pageable p);
@@ -18,5 +20,6 @@ public interface GoodsDAO extends JpaRepository<Goods, Long> {
             "or m.medicine.name like CONCAT('%',:k,'%'))")
     Page<Goods> commonSearchByStoreId(@Param("storeId") Integer storeId, @Param("k") String k, Pageable p);
 
+    Goods findByStoreIdAndMedicineId(Integer storeId, Long medicineId);
 
 }

@@ -11,6 +11,7 @@ import top.yzlin.chainpharmacymanagementsystem.dao.GoodsDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.SalesOrderDAO;
 import top.yzlin.chainpharmacymanagementsystem.entity.*;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassGoods;
+import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassOrderCell;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassOrderRequest;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassSalesOrder;
 import top.yzlin.chainpharmacymanagementsystem.httpstatus.BadRequestException;
@@ -19,7 +20,9 @@ import top.yzlin.tools.JpaTools;
 import top.yzlin.tools.JsonTools;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -84,15 +87,29 @@ public class SalesController {
         throw new ForbiddenException();
     }
 
-    @GetMapping("/api/storeGoods")
+    @GetMapping("/api/salesOrders")
     public ObjectNode findGoods(@RequestParam(value = "sort", required = false) String sort,
                                 @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                 @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
             User user = (User) principal;
-            return JsonTools.customResultData("storeGoods", salesOrderDAO
+            return JsonTools.customResultData("salesOrders", salesOrderDAO
                     .findAllByStoreId(user.getStore().getId(), JpaTools.createPageable(page, size, sort)).map(PassSalesOrder::new));
+        }
+        throw new ForbiddenException();
+    }
+
+    @GetMapping("/api/salesOrders/{orderId}/salesOrderCellList")
+    public ObjectNode findById(@PathVariable("orderId") Long orderId) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            User user = (User) principal;
+            SalesOrder salesOrder = salesOrderDAO.findById(orderId).orElseThrow(BadRequestException::new);
+            if (Objects.equals(salesOrder.getStore().getId(), user.getStore().getId())) {
+                Set<SalesOrderCell> salesOrderCellList = salesOrder.getSalesOrderCellList();
+                return JsonTools.customResultData("salesOrderCellList", salesOrderCellList.stream().map(PassOrderCell::new).collect(Collectors.toList()));
+            }
         }
         throw new ForbiddenException();
     }
@@ -120,9 +137,11 @@ public class SalesController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
             User user = (User) principal;
-            return JsonTools.customResultData("storeGoods",
+            return JsonTools.customResultData("salesOrders",
                     salesOrderDAO.findByDate(date, user.getStore().getId(), JpaTools.createPageable(page, size, sort)).map(PassSalesOrder::new));
         }
         throw new ForbiddenException();
     }
+
+
 }

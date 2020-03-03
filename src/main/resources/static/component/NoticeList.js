@@ -20,7 +20,7 @@ Vue.component(NoticeList, {
         apiData: "",
         apiField: "pass.passNotice",
         addDataObject: {
-            title: '添加药品'
+            title: '获取公告'
         }
     }),
     props: {},

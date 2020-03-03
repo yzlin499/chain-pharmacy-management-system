@@ -51,6 +51,7 @@ Vue.component(LayuiTable, {
             type: Object,
             default: () => ({})
         },
+        rowOnClick: Function
     },
     created: function () {
         let tablesName = this.tablesName || (this.tableName + "s");
@@ -111,8 +112,9 @@ Vue.component(LayuiTable, {
                 }
             }));
 
+            let openUI = null;
             if (this.isCanAdd) {
-                let openUI = {
+                openUI = {
                     id: `${this.tableName}Form`,
                     type: 1,
                     title: '标题',
@@ -154,6 +156,10 @@ Vue.component(LayuiTable, {
                         openUI[addDataObjectKey] = this.addDataObject[addDataObjectKey];
                     }
                 }
+            }
+
+            if (this.rowOnClick) {
+                layui.table.on(`row(${this.tableName}Filter)`, this.rowOnClick);
             }
 
             layui.table.on(`toolbar(${this.tableName}Filter)`, obj => {
