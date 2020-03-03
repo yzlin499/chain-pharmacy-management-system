@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import top.yzlin.chainpharmacymanagementsystem.entity.Goods;
 import top.yzlin.chainpharmacymanagementsystem.entity.SalesOrder;
 
+import java.util.Date;
+
 @Repository
 public interface SalesOrderDAO extends JpaRepository<SalesOrder, Long> {
 
@@ -18,6 +20,9 @@ public interface SalesOrderDAO extends JpaRepository<SalesOrder, Long> {
     @Query("select s from SalesOrder s where s.store.id=:storeId and (s.id like CONCAT('%',:k,'%') or s.operateUser.name like CONCAT('%',:k,'%'))")
     Page<SalesOrder> commonSearch(@Param("k") String k, @Param("storeId") Integer storeId, Pageable p);
 
-    @Query("select s from SalesOrder s where s.store.id=:storeId and s.date between :date and CONCAT(:date,' 23:59:59')")
-    Page<SalesOrder> findByDate(@Param("date") String date, @Param("storeId") Integer storeId, Pageable p);
+    @Query("select s from SalesOrder s where s.store.id=:storeId and s.date between :startDate and :endDate")
+    Page<SalesOrder> findByDate(@Param("startDate") Date startDate,
+                                @Param("endDate") Date endDate,
+                                @Param("storeId") Integer storeId,
+                                Pageable p);
 }

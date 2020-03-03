@@ -16,6 +16,7 @@ public interface GoodsDAO extends JpaRepository<Goods, Long> {
     Page<Goods> findAllByStoreId(Integer storeId, Pageable p);
 
     @Query("select m from Goods m where m.storeId =:storeId " +
+            "and m.count>0 " +
             "and (m.medicine.id like CONCAT('%',:k,'%') " +
             "or m.medicine.name like CONCAT('%',:k,'%'))")
     Page<Goods> commonSearchByStoreId(@Param("storeId") Integer storeId, @Param("k") String k, Pageable p);

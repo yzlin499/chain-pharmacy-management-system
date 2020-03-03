@@ -105,7 +105,7 @@ Vue.component(SalesPanel, {
                     "code": 0,
                     "msg": res.message,
                     "count": res.page.totalElements,
-                    "data": res._embedded["goods"]
+                    "data": res._embedded.customers
                 }),
                 request: {limitName: 'size'},
                 itemOnClick: obj => layui.jquery("#custormerSearch").val(obj.data.phone)
@@ -144,13 +144,13 @@ Vue.component(SalesPanel, {
     methods: {
         settleAccounts: function () {
             let val = {
-                customerPhone: "",
+                customerPhone: layui.jquery("#custormerSearch").val(),
                 orderMap: {}
             };
             for (let key in this.shoppingTrolley) {
                 val.orderMap[key] = this.shoppingTrolley[key].buyCount
             }
-            axios.post("/", val).then(response => {
+            axios.post("/api/salesOrders", val).then(response => {
                 if (response.status === 201) {
                     layer.msg("订单创建成功，订单号：" + response.data.id);
                 }

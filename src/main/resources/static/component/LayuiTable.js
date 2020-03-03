@@ -8,12 +8,12 @@ const template = `
         <div :id="tableName+'Toolbar'" style="display:none">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-sm" v-if="isCanAdd" lay-event="addData">添加数据</button>
-                <button class="layui-btn layui-btn-sm" lay-event="deleteDataBySelect">删除选中数据</button>
-                <div class="layui-inline" style="margin-bottom: 10px;margin-right: 10px;">
+                <button class="layui-btn layui-btn-sm" v-if="isCanDelete" lay-event="deleteDataBySelect">删除选中数据</button>
+                <div class="layui-inline" v-if="isCanSelect" style="margin-bottom: 10px;margin-right: 10px;">
                     <input class="layui-input layui-btn-sm" style="height: 30px;" :id="tableName+'SearchKey'"
                            autocomplete="off">
                 </div>
-                <button class="layui-btn layui-btn-sm" lay-event="searchData">搜索</button>
+                <button class="layui-btn layui-btn-sm" v-if="isCanSelect" lay-event="searchData">搜索</button>
                 <slot name="toolBarSlot"></slot>
             </div>
         </div>
@@ -35,6 +35,14 @@ Vue.component(LayuiTable, {
         apiField: String,
         addDataObject: Object,
         isCanAdd: {
+            type: Boolean,
+            default: true
+        },
+        isCanDelete: {
+            type: Boolean,
+            default: true
+        },
+        isCanSelect: {
             type: Boolean,
             default: true
         },
@@ -92,7 +100,7 @@ Vue.component(LayuiTable, {
                 })
             );
             layui.table.on(`tool(${this.tableName}Filter)`, obj => {
-                if (obj.event === 'dataDel') {
+                if (this.isCanDelete && obj.event === 'dataDel') {
                     axios.delete(apiData + "/" + obj.data.id).then(response => {
                         if (response.status === 204) {
                             layer.msg("数据删除成功");
@@ -177,9 +185,10 @@ Vue.component(LayuiTable, {
                             url: apiData
                         })
                     }
-
                 }
-                this.toolBarOnClick[obj.event](obj, this);
+                if (this.toolBarOnClick[obj.event]) {
+                    this.toolBarOnClick[obj.event](obj, this);
+                }
             });
             this.initFunction(this);
         }));

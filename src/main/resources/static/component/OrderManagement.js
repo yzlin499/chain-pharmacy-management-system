@@ -6,12 +6,13 @@ const template = `
     <div>
         <layui-table :tableName="tableName"
                      :isCanAdd="false"
+                     :isCanDelete="false"
+                     :isCanSelect="false"
                      :apiField="apiField"
-                     :initFunction="initFunction">
-            <template v-slot:toolBarSlot>
-                <button class="layui-btn layui-btn-sm orderDateChoose">选择日期</button>
-            </template>
+                     :initFunction="initFunction"
+                     :rowOnClick="rowOnClick">
         </layui-table>
+        <button class="layui-btn layui-btn-sm orderDateChoose">选择日期</button>
     </div>
 `;
 
@@ -25,7 +26,7 @@ Vue.component(OrderManagement, {
     created: function () {
     },
     methods: {
-        initFunction: (t) => layui.use('laydate', () => {
+        initFunction: (t) => layui.use(['laydate', 'jquery'], () => {
             layui.laydate.render({
                 elem: layui.jquery(".orderDateChoose")[0],
                 trigger: 'click',
@@ -33,40 +34,32 @@ Vue.component(OrderManagement, {
             })
         }),
         rowOnClick: (obj) => {
-            obj.data;
-            layer.open({
-                id: `orderManagementForm`,
-                type: 1,
-                title: '查看详情',
-                area: ['500px', '400px'],
-                shade: 0,
-                maxmin: true,
-                content: `<table id="orderManagementForm" lay-filter="orderManagementFormFilter"></table>`,
-                btn: ['确定'],
-                yes: (index, layero) => layer.close(index),
-                success: layero => {
-                    layui.table.render({
-                        elem: '#orderManagementForm',
-                        height: 312,
-                        url: '/demo/table/user/', //数据接口
-                        cols: [[ //表头
-                            {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                            , {field: 'username', title: '用户名', width: 80}
-                            , {field: 'sex', title: '性别', width: 80, sort: true}
-                            , {field: 'city', title: '城市', width: 80}
-                            , {field: 'sign', title: '签名', width: 177}
-                            , {field: 'experience', title: '积分', width: 80, sort: true}
-                            , {field: 'score', title: '评分', width: 80, sort: true}
-                            , {field: 'classify', title: '职业', width: 80}
-                            , {field: 'wealth', title: '财富', width: 135, sort: true}
-                        ]]
+            layui.jquery.get("/api/tableField/pass.passOrderCell", fieldData => {
+                layui.jquery.get(`/api/salesOrders/${obj.data.id}/salesOrderCellList`, data => {
+                    layer.open({
+                        id: `orderManagementForm`,
+                        type: 1,
+                        title: '查看详情',
+                        // area: '510px',
+                        shade: 0,
+                        resize: false,
+                        content: `<table id="orderManagementForm"></table>`,
+                        btn: ['确定'],
+                        yes: (index, layero) => layer.close(index),
+                        success: layero => {
+                            layui.table.render({
+                                elem: '#orderManagementForm',
+                                area: ['800px', '700px'],
+                                cols: [fieldData.data],
+                                data: data._embedded.salesOrderCellList
+                            });
+                            layer.setTop(layero);
+                        }
                     });
-
-                    layer.setTop(layero);
-                    openUI.vueObj = new Vue({el: `#${this.tableName}Form`})
-                }
-            });
+                })
+            })
         }
+
 
     }
 });

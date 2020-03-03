@@ -10,6 +10,9 @@ import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassOrderCellTotal;
 import top.yzlin.chainpharmacymanagementsystem.httpstatus.ForbiddenException;
 import top.yzlin.tools.JsonTools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 public class SaleOrderCellController {
     private SalesOrderCellDAO salesOrderCellDAO;
     private GoodsDAO goodsDAO;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public void setSalesOrderCellDAO(SalesOrderCellDAO salesOrderCellDAO) {
@@ -30,13 +34,20 @@ public class SaleOrderCellController {
         this.goodsDAO = goodsDAO;
     }
 
+    @GetMapping("/api/saleOrderCells")
+    public ObjectNode findSaleOrderCell() throws ParseException {
+        return findSaleOrderCellByDate(sdf.format(new Date()).split("\\s")[0]);
+    }
+
+
     @GetMapping("/api/saleOrderCells/{date}")
-    public ObjectNode findSaleOrderCellByDate(@PathVariable("date") String date) {
+    public ObjectNode findSaleOrderCellByDate(@PathVariable("date") String date) throws ParseException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
             User user = (User) principal;
             Map<Long, PassOrderCellTotal> countMap = new HashMap<>();
-            salesOrderCellDAO.findAllByStoreIdAndDate(user.getStore().getId(), date).forEach(i -> {
+            salesOrderCellDAO.findAllByStoreIdAndDate(user.getStore().getId(),
+                    sdf.parse(date + " 00:00:00"), sdf.parse(date + " 23:59:59")).forEach(i -> {
                 Long id = i.getMedicine().getId();
                 PassOrderCellTotal total;
                 if (countMap.containsKey(id)) {

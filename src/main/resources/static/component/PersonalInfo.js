@@ -46,7 +46,7 @@ Vue.component(PersonalInfo, {
     created: function () {
         let user = GLOBAL.LocalUser().data;
         Vue.set(this, "userInfo", {
-            username: user.username,
+            username: user.name,
             storeName: user.store.name,
             position: user.authorities.map(i => i.name).join(" "),
             phone: user.phone

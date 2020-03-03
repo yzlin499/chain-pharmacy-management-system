@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import top.yzlin.chainpharmacymanagementsystem.entity.SalesOrder;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
+import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableHeader;
 
 import java.util.Date;
 
 @Data
+@LayuiTableHeader(isCanDelete = false)
 public class PassSalesOrder {
     @LayuiTableField("订单号")
     private Long id;

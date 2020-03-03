@@ -16,7 +16,6 @@ public final class JsonTools {
         ObjectNode embedded = OBJECT_MAPPER.createObjectNode();
         res.putPOJO("_embedded", embedded);
         embedded.putPOJO(nodeName, page.toList());
-
         ObjectNode pageNode = OBJECT_MAPPER.createObjectNode();
         res.putPOJO("page", pageNode);
         pageNode.put("size", page.getSize());

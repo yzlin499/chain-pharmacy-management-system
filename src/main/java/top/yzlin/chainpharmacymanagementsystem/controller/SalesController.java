@@ -19,6 +19,8 @@ import top.yzlin.chainpharmacymanagementsystem.httpstatus.ForbiddenException;
 import top.yzlin.tools.JpaTools;
 import top.yzlin.tools.JsonTools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class SalesController {
     private SalesOrderDAO salesOrderDAO;
     private CustomerDAO customerDAO;
     private GoodsDAO goodsDAO;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public void setSalesOrderDAO(SalesOrderDAO salesOrderDAO) {
@@ -64,7 +67,7 @@ public class SalesController {
             Customer finalByPhone = byPhone;
             salesOrder.setSalesOrderCellList(passOrderRequest.getOrderMap().entrySet().stream()
                     .map(e -> goodsDAO.findById(Long.parseLong(e.getKey())).map(goods -> {
-                        if (goods.getCount() < e.getValue()) {
+                        if (goods.getCount() >= e.getValue()) {
                             SalesOrderCell orderCell = new SalesOrderCell();
                             orderCell.setCustomer(finalByPhone);
                             orderCell.setOperateUser(user);
@@ -133,12 +136,13 @@ public class SalesController {
     public ObjectNode findByDate(@PathVariable("date") String date,
                                  @RequestParam(value = "sort", required = false) String sort,
                                  @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                 @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+                                 @RequestParam(value = "size", required = false, defaultValue = "10") int size) throws ParseException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
             User user = (User) principal;
             return JsonTools.customResultData("salesOrders",
-                    salesOrderDAO.findByDate(date, user.getStore().getId(), JpaTools.createPageable(page, size, sort)).map(PassSalesOrder::new));
+                    salesOrderDAO.findByDate(sdf.parse(date + " 00:00:00"), sdf.parse(date + " 23:59:59"),
+                            user.getStore().getId(), JpaTools.createPageable(page, size, sort)).map(PassSalesOrder::new));
         }
         throw new ForbiddenException();
     }

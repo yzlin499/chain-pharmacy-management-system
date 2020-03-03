@@ -1,12 +1,13 @@
 package top.yzlin.chainpharmacymanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiFormField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableHeader;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -26,8 +27,15 @@ public class Customer {
     private String name;
     @LayuiTableField("手机")
     private String phone;
+
     @LayuiTableField("创建时间")
+    @LayuiFormField(enable = false)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
+
     @LayuiTableField(value = "积分", edit = LayuiTableField.EDIT_TYPE_TEXT)
-    private Integer integral;
+    @LayuiFormField(enable = false)
+    private Integer integral = 0;
 }

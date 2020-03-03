@@ -8,6 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import top.yzlin.chainpharmacymanagementsystem.dao.*;
 import top.yzlin.chainpharmacymanagementsystem.entity.*;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassGoods;
+import top.yzlin.tools.JpaTools;
+
+import java.text.SimpleDateFormat;
 
 @SpringBootTest
 class ChainPharmacyManagementSystemApplicationTests {
@@ -27,6 +30,9 @@ class ChainPharmacyManagementSystemApplicationTests {
     @Autowired
     MedicineDAO medicineDAO;
 
+    @Autowired
+    SalesOrderDAO salesOrderDAO;
+
     @Test
     void contextLoads() {
         medicineDAO.findAll().forEach(i -> {
@@ -41,8 +47,12 @@ class ChainPharmacyManagementSystemApplicationTests {
 
     @Test
     void testBean() {
-        Page<Goods> goods = goodsDAO.commonSearchByStoreId(16, "123", PageRequest.of(0, 10));
-        goods.toList().forEach(System.out::println);
+//        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+//        simpleDateFormat.parse("2020-03-02")
+//        Page<SalesOrder> byDate = salesOrderDAO.findByDate("2020-03-02", 16, PageRequest.of(0, 10));
+//        System.out.println(byDate.toList());
+        System.out.println(salesOrderDAO
+                .findAllByStoreId(16, JpaTools.createPageable(0, 10)).toList());
     }
 
 }
