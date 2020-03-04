@@ -25,7 +25,6 @@ import java.util.Objects;
 public class GoodsController {
     private GoodsDAO goodsDAO;
     private MedicineDAO medicineDAO;
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public void setMedicineDAO(MedicineDAO medicineDAO) {

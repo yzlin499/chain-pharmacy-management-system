@@ -1,10 +1,14 @@
 package top.yzlin.chainpharmacymanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiFormField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
+import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableHeader;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -19,17 +23,20 @@ public class Store {
     @LayuiTableField(enable = false)
     private Integer id;
 
-    @LayuiTableField("名字")
+    @LayuiTableField(value = "名字", edit = LayuiTableField.EDIT_TYPE_TEXT)
     private String name;
 
-    @LayuiTableField("地址")
+    @LayuiTableField(value = "地址", edit = LayuiTableField.EDIT_TYPE_TEXT)
     private String address;
 
     @LayuiTableField("创建日期")
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @LayuiFormField(enable = false)
+    @CreationTimestamp
     private Date createData;
 
 
-    @LayuiTableField("备注信息")
+    @LayuiTableField(value = "备注信息", edit = LayuiTableField.EDIT_TYPE_TEXT)
     private String des;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

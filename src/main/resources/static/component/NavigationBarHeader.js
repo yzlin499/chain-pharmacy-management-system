@@ -40,7 +40,7 @@ Vue.component(NavigationBarHeader, {
         registeredPath:"",
         systemName:GLOBAL.ApplicationName,
         leftMenus:[
-            {name:"控制台",href:""},
+            {name: "控制台", href: "/cpms/index.html"},
             {name: "活动界面", href: ""},
             {
                 name: "常用功能",
@@ -51,7 +51,7 @@ Vue.component(NavigationBarHeader, {
             },
         ],
         rightMenus:[
-            {name:"控制台",href:""},
+            {name: "控制台", href: "/cpms/index.html"},
             {name: "退出登录", href: "/api/user/logout"},
         ],
         user:{

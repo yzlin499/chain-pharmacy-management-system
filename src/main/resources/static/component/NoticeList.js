@@ -7,7 +7,8 @@ const template = `
                  :addDataObject="addDataObject"
                  :apiData="apiData"
                  :apiField="apiField"
-                 :tablesName="tablesName">
+                 :tablesName="tablesName"
+                 :rowOnClick="rowOnClick">
     </layui-table>
 `;
 
@@ -27,7 +28,9 @@ Vue.component(NoticeList, {
     created: function () {
 
     },
-    methods: {}
+    methods: {
+        rowOnClick: (obj) => window.open("/cpms/notice.html?id=" + obj.data.id)
+    }
 });
 
 export default NoticeList

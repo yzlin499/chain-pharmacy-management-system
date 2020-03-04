@@ -26,19 +26,23 @@ Vue.component(NavigationBarLeftSide, {
     data: () => ({
         navSelected: "",
         systemName: GLOBAL.ApplicationName,
-        menus: GLOBAL.BarLeft,
+        menus: [],
     }),
     props: {
         selectCallBack: Object
     },
     created: function () {
-        layui.use('element', () => {
-            layui.element.on('nav(leftNav)', elem => {
-                let message = elem.attr("comp");
-                if (undefined !== message) {
-                    this.navSelected = message;
-                    this.$emit('OnNavSelect', message, elem.text(), true)
-                }
+        layui.use(['element', 'jquery'], () => {
+            layui.jquery.get("/api/permissions", data => {
+                Vue.set(this, "menus", data);
+                layui.element.on('nav(leftNav)', elem => {
+                    let message = elem.attr("comp");
+                    if (undefined !== message) {
+                        this.navSelected = message;
+                        this.$emit('OnNavSelect', message, elem.text(), true)
+                    }
+                });
+                setTimeout(() => layui.element.render('nav', 'leftNav'), 200);
             });
         });
         this.selectCallBack.$on('selectCallBack', data => this.navSelected = data);
