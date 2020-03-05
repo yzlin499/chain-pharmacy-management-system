@@ -7,6 +7,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import top.yzlin.chainpharmacymanagementsystem.entity.Customer;
 import top.yzlin.chainpharmacymanagementsystem.entity.Medicine;
 import top.yzlin.chainpharmacymanagementsystem.entity.Store;
+import top.yzlin.chainpharmacymanagementsystem.entity.User;
 
 @Configuration
 public class RestDataConfig {
@@ -18,7 +19,8 @@ public class RestDataConfig {
                 config.exposeIdsFor(
                         Medicine.class,
                         Customer.class,
-                        Store.class
+                        Store.class,
+                        User.class
                 );
             }
         };

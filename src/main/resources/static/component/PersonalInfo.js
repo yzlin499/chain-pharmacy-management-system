@@ -35,7 +35,8 @@ Vue.component(PersonalInfo, {
     template: template,
     data: () => ({
         userInfoHead: {
-            username: "名字",
+            username: "用户名",
+            name: "名字",
             storeName: "隶属商店",
             position: "职务",
             phone: "手机"
@@ -46,7 +47,8 @@ Vue.component(PersonalInfo, {
     created: function () {
         let user = GLOBAL.LocalUser().data;
         Vue.set(this, "userInfo", {
-            username: user.name,
+            name: user.name,
+            username: user.username,
             storeName: user.store.name,
             position: user.authorities.map(i => i.name).join(" "),
             phone: user.phone

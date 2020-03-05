@@ -46,8 +46,8 @@
             "name": "人事管理",
             "child": [
                 {
-                    "name": "权限调整",
-                    "comp": "GoodsManagement"
+                    "name": "员工管理",
+                    "comp": "EmployeesManagement"
                 },
                 {
                     "name": "人员变动",
@@ -224,8 +224,8 @@
             "name": "人事管理",
             "child": [
                 {
-                    "name": "权限调整",
-                    "comp": "GoodsManagement"
+                    "name": "员工管理",
+                    "comp": "EmployeesManagement"
                 }
             ]
         },

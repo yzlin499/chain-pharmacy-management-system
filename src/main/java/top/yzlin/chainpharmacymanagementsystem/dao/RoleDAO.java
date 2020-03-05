@@ -6,4 +6,5 @@ import top.yzlin.chainpharmacymanagementsystem.entity.Role;
 
 @Repository
 public interface RoleDAO extends JpaRepository<Role, Integer> {
+    Role findByAuthority(String authority);
 }

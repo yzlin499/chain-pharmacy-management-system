@@ -26,11 +26,12 @@ Vue.component(LayuiForm, {
         formItems: [],
     }),
     created: function () {
+        let apiField = this.apiField || this.tableName;
         if (layui.data('formField')[this.tableName]) {
             Vue.set(this, "formItems", layui.data('formField')[this.tableName])
         } else {
             layui.use('jquery', () => {
-                layui.jquery.get(`/api/formField/${this.apiField}`, res => {
+                layui.jquery.get(`/api/formField/${apiField}`, res => {
                     layui.data('formField', {key: this.tableName, value: res.data});
                     Vue.set(this, "formItems", res.data)
                 });
