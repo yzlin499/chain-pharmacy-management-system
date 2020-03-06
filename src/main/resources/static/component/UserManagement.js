@@ -3,12 +3,23 @@ import Vue from "/js/vue.js";
 // language=Vue
 const template = `
     <div>
-        <input id="userSearch" type="text" name="title" required placeholder="搜索用户，点击进行操作" autocomplete="off"
+        <input id="userSearch" type="text" name="user" required placeholder="搜索用户，点击进行操作" autocomplete="off"
                class="layui-input">
-        <div class="layui-form">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>员工信息</legend>
+        </fieldset>
+        <div class="layui-form" lay-filter="userManagementForm">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" disabled class="layui-input">
+                </div>
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">用户名</label>
-                <div class="layui-input-block">{{tempUser.name}}</div>
+                <div class="layui-input-block">
+                    <input type="text" name="username" disabled class="layui-input">
+                </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">姓名</label>
@@ -25,23 +36,21 @@ const template = `
             <div class="layui-form-item">
                 <label class="layui-form-label">隶属商店</label>
                 <div class="layui-input-block">
-                    <input id="storeSearch" type="text" name="store" required placeholder="搜索商店，点击进行操作"
-                           autocomplete="off"
-                           class="layui-input">
+                    <input id="storeSearch" type="text" name="storeName" required placeholder="搜索商店，点击进行操作"
+                           autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">职位</label>
                 <div class="layui-input-block">
-                    <input id="storeSearch" type="text" name="store" required placeholder="搜索商店，点击进行操作"
-                           autocomplete="off"
-                           class="layui-input">
+                    <select name="authority">
+                        <option :value="r.authority" v-for="r in roles">{{r.name}}</option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    <button class="layui-btn" @click="submit">保存更改</button>
                 </div>
             </div>
         </div>
@@ -52,11 +61,17 @@ export const UserManagement = "user-management";
 Vue.component(UserManagement, {
     template: template,
     data: () => ({
-        tempUser: {}
+        tempUser: {},
+        roles: [],
+        selectStore: null
+
     }),
     props: {},
     created: function () {
-        layui.use(['yutons_sug', 'table', 'jquery'], () => {
+        layui.use(['yutons_sug', 'table', 'jquery', 'form'], () => {
+            layui.jquery.get("/api/roles", rolesData => {
+                Vue.set(this, 'roles', rolesData._embedded.roles);
+            });
             layui.yutons_sug.render({
                 id: "userSearch",
                 url: `/api/users/search/common?k=`,
@@ -74,25 +89,57 @@ Vue.component(UserManagement, {
                     "data": res._embedded["users"]
                 }),
                 request: {limitName: 'size'},
+                itemOnClick: obj => GLOBAL.GetResources(obj.data, ["store", "authorities"], data => {
+                    data.storeName = data.store.name;
+                    this.selectStore = data.store;
+                    data.authority = data.authorities[0].authority;
+                    layui.form.val('userManagementForm', data);
+                    layui.jquery("#userSearch").val("")
+                })
+            });
+            layui.yutons_sug.render({
+                id: "storeSearch",
+                url: `/api/stores/search/common?k=`,
+                height: "300",
+                cols: [[
+                    {field: 'name', title: '商店名'},
+                    {field: 'address', title: '地址'},
+                    {field: 'des', title: '备注'}
+                ]],
+                type: 'sugTable',
+                parseData: (res) => ({
+                    "code": 0,
+                    "msg": res.message,
+                    "count": res.page.totalElements,
+                    "data": res._embedded["stores"]
+                }),
+                request: {limitName: 'size'},
                 itemOnClick: obj => {
-                    let data = obj.data;
-                    let shoppingTrolley = this.shoppingTrolley[data.id];
-                    if (shoppingTrolley) {
-                        shoppingTrolley.buyCount++;
-                    } else {
-                        data.buyCount = 1;
-                        this.shoppingTrolley[data.id] = data;
-                        shoppingTrolley = this.shoppingTrolley[data.id];
-                        this.shopTable.data.push(data);
-                    }
-                    shoppingTrolley.buyTotal = shoppingTrolley.buyCount * shoppingTrolley.price;
-                    salesTable.reload(this.shopTable);
-                    layui.jquery("#saleMedicineSearch").val("")
+                    this.selectStore = obj.data;
+                    layui.jquery("#storeSearch").val(obj.data.name)
                 }
+            });
+            layui.form.on('submit(userManagementFormSubmit)', function (data) {
+                console.log(data.field);
+                return false;
             });
         })
     },
-    methods: {}
+    methods: {
+        submit: function () {
+            let val = layui.form.val("userManagementForm");
+            val.store = this.selectStore;
+            axios.put(`/api/user/${val.id}`, val)
+                .then(response => {
+                    if (response.status === 200) {
+                        layer.msg("数据修改成功");
+                    }
+                }).catch(function (error) {
+                layer.msg("数据修改失败");
+                console.log(error);
+            })
+        }
+    }
 });
 
 export default UserManagement

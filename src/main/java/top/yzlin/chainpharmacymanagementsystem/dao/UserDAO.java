@@ -21,7 +21,7 @@ public interface UserDAO extends JpaRepository<User, Long> {
     List<User> findByStoreId(@Param("storeId") Integer storeId);
 
     @RestResource(path = "common", rel = "common")
-    @Query("select m from User u where u.name like CONCAT('%',:k,'%') " +
+    @Query("select u from User u where u.name like CONCAT('%',:k,'%') " +
             "or u.username like CONCAT('%',:k,'%') " +
             "or u.phone like CONCAT(:k,'%')")
     Page<User> commonSearch(@Param("k") String k, Pageable p);
