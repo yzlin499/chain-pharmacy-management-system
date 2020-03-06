@@ -76,47 +76,50 @@ Vue.component(EmployeesManagement, {
     }),
     props: {},
     created: function () {
-        layui.use(['jquery', 'form'], () => layui.jquery.get(`/api/users/search/storeId?storeId=${GLOBAL.LocalUser().data.store.id}`,
-            data => layui.jquery.get("/api/roles", rolesData => {
-                Vue.set(this, 'roles', rolesData._embedded.roles);
-                Vue.set(this, 'employees', data._embedded.users);
-                for (let i = 0; i < this.employees.length; i++) {
-                    layui.jquery.get(this.employees[i]._links.authorities.href, a =>
-                        Vue.set(this.employees[i], 'authority', a._embedded.roles[0].authority))
-                }
-                layui.form.on('select(authority)', data => {
-                    let employee = this.employees[layui.jquery(data.elem).attr("userindex")];
-                    employee.authority = data.value;
-                    axios.put(`/api/user/${employee.id}`, employee)
-                        .then(response => {
-                            if (response.status === 200) {
-                                layer.msg("数据修改成功");
-                            }
-                        }).catch(function (error) {
-                        layer.msg("数据修改失败");
-                        console.log(error);
-                    })
-                });
-                setTimeout(() => layui.form.render('select'), 200);
-            })
-        ))
+        this.initData();
     },
     methods: {
+        initData: function () {
+            layui.use(['jquery', 'form'], () => layui.jquery.get(`/api/users/search/storeId?storeId=${GLOBAL.LocalUser().data.store.id}`,
+                data => layui.jquery.get("/api/roles", rolesData => {
+                    Vue.set(this, 'roles', rolesData._embedded.roles);
+                    Vue.set(this, 'employees', data._embedded.users);
+                    for (let i = 0; i < this.employees.length; i++) {
+                        layui.jquery.get(this.employees[i]._links.authorities.href, a =>
+                            Vue.set(this.employees[i], 'authority', a._embedded.roles[0].authority))
+                    }
+                    layui.form.on('select(authority)', data => {
+                        let employee = this.employees[layui.jquery(data.elem).attr("userindex")];
+                        employee.authority = data.value;
+                        axios.put(`/api/user/${employee.id}`, employee)
+                            .then(response => {
+                                if (response.status === 200) {
+                                    layer.msg("数据修改成功");
+                                }
+                            }).catch(function (error) {
+                            layer.msg("数据修改失败");
+                            console.log(error);
+                        })
+                    });
+                    setTimeout(() => layui.form.render('select'), 200);
+                })
+            ))
+        },
+
         dismissedEmployees: function (user, index) {
             layer.open({
                 title: '开除员工',
                 content: `开除员工${user.name}？`,
                 btn: ['确定', '取消'],
-                yes: () => axios.delete(`/api/user/${user.id}`)
-                    .then(response => {
-                        if (response.status === 204) {
-                            layer.msg("数据删除成功");
-                            Vue.delete(this.employees, index);
-                        }
-                    }).catch(function (error) {
-                        layer.msg("数据删除失败，有数据引用当前数据，无法删除");
-                        console.log(error);
-                    })
+                yes: () => axios.delete(`/api/user/${user.id}`).then(response => {
+                    if (response.status === 204) {
+                        layer.msg("数据删除成功");
+                        Vue.delete(this.employees, index);
+                    }
+                }).catch(function (error) {
+                    layer.msg("数据删除失败，有数据引用当前数据，无法删除");
+                    console.log(error);
+                })
             })
         },
         addNewEmployees: function () {
@@ -134,18 +137,15 @@ Vue.component(EmployeesManagement, {
                 btn: ['保存', '取消'],
                 yes: (index, layero) => {
                     let val = layui.form.val(`userForm`);
-                    console.log(val);
-
-                    // axios.post("", val).then(response => {
-                    //     console.log(response);
-                    //     if (response.status === 201) {
-                    //         layer.msg("数据添加成功");
-                    //     }
-                    //     this.tableObj.reload();
-                    // }).catch(function (error) {
-                    //     layer.msg("数据添加失败");
-                    //     console.log(error);
-                    // });
+                    axios.post("/api/users", val).then(response => {
+                        if (response.status === 201) {
+                            layer.msg("数据添加成功");
+                        }
+                        this.initData();
+                    }).catch(function (error) {
+                        layer.msg("数据添加失败");
+                        console.log(error);
+                    });
 
                     layer.close(index);
                 },
