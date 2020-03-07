@@ -9,8 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import top.yzlin.chainpharmacymanagementsystem.entity.Goods;
 
-import javax.validation.constraints.NotNull;
-
 @Repository
 public interface GoodsDAO extends JpaRepository<Goods, Long> {
     Page<Goods> findAllByStoreId(Integer storeId, Pageable p);

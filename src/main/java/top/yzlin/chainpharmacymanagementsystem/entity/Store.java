@@ -8,7 +8,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiFormField;
 import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableField;
-import top.yzlin.chainpharmacymanagementsystem.layuiannotations.LayuiTableHeader;
 
 import javax.persistence.*;
 import java.sql.Date;

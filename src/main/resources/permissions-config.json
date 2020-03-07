@@ -73,11 +73,11 @@
             "child": [
                 {
                     "name": "创建活动",
-                    "comp": "NavigationBarHeader"
+                    "comp": "ActivityCreate"
                 },
                 {
                     "name": "活动列表",
-                    "comp": "NavigationBarHeader"
+                    "comp": "ActivityManagement"
                 }
             ]
         },
@@ -127,7 +127,7 @@
             "child": [
                 {
                     "name": "活动列表",
-                    "comp": "NavigationBarHeader"
+                    "comp": "ActivityManagement"
                 }
             ]
         }
@@ -176,7 +176,7 @@
             "child": [
                 {
                     "name": "活动列表",
-                    "comp": "NavigationBarHeader"
+                    "comp": "ActivityManagement"
                 }
             ]
         }
@@ -247,11 +247,11 @@
             "child": [
                 {
                     "name": "创建活动",
-                    "comp": "NavigationBarHeader"
+                    "comp": "ActivityCreate"
                 },
                 {
                     "name": "活动列表",
-                    "comp": "NavigationBarHeader"
+                    "comp": "ActivityManagement"
                 }
             ]
         }

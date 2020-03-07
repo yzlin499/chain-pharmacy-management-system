@@ -2,6 +2,9 @@ const GLOBAL = {
     UserDate: null,
     ApplicationName: "连锁药店管理系统",
     LocalUser: LocalUser,
+    Activities: [
+        {name: "满减活动", type: "FullReductionActivity"},
+    ],
     GetQueryString: (name) => {
         let r = window.location.search.substr(1).match(new RegExp("(^|&)" + name + "=([^&]*)(&|$)"));
         if (r != null) return unescape(r[2]);

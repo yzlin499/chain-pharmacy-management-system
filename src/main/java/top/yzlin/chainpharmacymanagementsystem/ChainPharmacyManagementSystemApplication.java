@@ -5,14 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import top.yzlin.chainpharmacymanagementsystem.dao.GoodsDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.RoleDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.UserDAO;
-import top.yzlin.chainpharmacymanagementsystem.entity.Goods;
 import top.yzlin.chainpharmacymanagementsystem.entity.Role;
 import top.yzlin.chainpharmacymanagementsystem.entity.User;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @SpringBootApplication

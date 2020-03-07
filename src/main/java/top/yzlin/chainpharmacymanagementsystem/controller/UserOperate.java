@@ -13,17 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import top.yzlin.chainpharmacymanagementsystem.dao.RoleDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.StoreDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.UserDAO;
-import top.yzlin.chainpharmacymanagementsystem.entity.Goods;
 import top.yzlin.chainpharmacymanagementsystem.entity.LogData;
-import top.yzlin.chainpharmacymanagementsystem.entity.Role;
 import top.yzlin.chainpharmacymanagementsystem.entity.User;
-import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassGoods;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassUser;
 import top.yzlin.chainpharmacymanagementsystem.httpstatus.BadRequestException;
 import top.yzlin.chainpharmacymanagementsystem.httpstatus.ForbiddenException;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 

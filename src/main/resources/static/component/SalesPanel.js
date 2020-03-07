@@ -1,4 +1,5 @@
 import Vue from "/js/vue.js";
+import ActivityPanel from "/component/ActivityPanel.js";
 
 // language=Vue
 const template = `
@@ -6,6 +7,7 @@ const template = `
         <input id="saleMedicineSearch" type="text" name="title" required placeholder="搜索药品，点击加入购物车" autocomplete="off"
                class="layui-input">
         <table class="layui-hide" id="shoppingTrolley" lay-filter="salesPanelFilter"></table>
+        <activity-panel :shoppingTrolley="shoppingTrolley"></activity-panel>
         <div class="layui-inline">
             <label class="layui-form-label">会员搜索</label>
             <div class="layui-input-inline" style="width: 400px;">
@@ -39,7 +41,6 @@ Vue.component(SalesPanel, {
     }),
     props: {},
     created: function () {
-        console.log(123);
         layui.use(['yutons_sug', 'table', 'jquery'], () => {
             let salesTable = layui.table.render({
                 elem: '#shoppingTrolley',
@@ -78,10 +79,11 @@ Vue.component(SalesPanel, {
                     let data = obj.data;
                     let shoppingTrolley = this.shoppingTrolley[data.id];
                     if (shoppingTrolley) {
+
                         shoppingTrolley.buyCount++;
                     } else {
                         data.buyCount = 1;
-                        this.shoppingTrolley[data.id] = data;
+                        Vue.set(this.shoppingTrolley, data.id, data);
                         shoppingTrolley = this.shoppingTrolley[data.id];
                         this.shopTable.data.push(data);
                     }
@@ -133,7 +135,7 @@ Vue.component(SalesPanel, {
                         shoppingTrolley.buyCount++;
                     }
                 } else if (obj.event === 'delete') {
-                    this.shoppingTrolley[obj.data.id] = null;
+                    Vue.set(this.shoppingTrolley, obj.data.id, null);
                     this.shopTable.data = this.shopTable.data.filter(i => i.id !== obj.data.id);
                 }
                 shoppingTrolley.buyTotal = shoppingTrolley.buyCount * shoppingTrolley.price;
@@ -161,7 +163,7 @@ Vue.component(SalesPanel, {
             });
         },
         clean: function () {
-            this.shoppingTrolley = {};
+            Vue.set(this, "shoppingTrolley", {});
             this.shopTable.data = [];
             this.tableObj.reload(this.shopTable);
         }

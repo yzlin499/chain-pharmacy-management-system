@@ -3,14 +3,12 @@ package top.yzlin.chainpharmacymanagementsystem.idgenerator;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentityGenerator;
-import top.yzlin.chainpharmacymanagementsystem.entity.Medicine;
 import top.yzlin.chainpharmacymanagementsystem.entity.SalesOrder;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * 这个id在9224年的时候会发生溢出

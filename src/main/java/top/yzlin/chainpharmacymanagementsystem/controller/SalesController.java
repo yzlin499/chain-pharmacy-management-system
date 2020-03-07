@@ -10,7 +10,6 @@ import top.yzlin.chainpharmacymanagementsystem.dao.CustomerDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.GoodsDAO;
 import top.yzlin.chainpharmacymanagementsystem.dao.SalesOrderDAO;
 import top.yzlin.chainpharmacymanagementsystem.entity.*;
-import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassGoods;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassOrderCell;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassOrderRequest;
 import top.yzlin.chainpharmacymanagementsystem.entity.pass.PassSalesOrder;

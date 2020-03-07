@@ -99,6 +99,4 @@ public class CommonTest {
         }
         return node;
     }
-
-
 }
