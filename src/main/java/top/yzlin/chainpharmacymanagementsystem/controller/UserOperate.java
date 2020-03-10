@@ -48,7 +48,7 @@ public class UserOperate {
 
     @Value("${permissions-config}")
     public void setPermissionsConfig(Resource resource) throws IOException {
-        permissionsConfig = new ObjectMapper().readValue(resource.getFile(), ObjectNode.class);
+        permissionsConfig = new ObjectMapper().readValue(resource.getInputStream(), ObjectNode.class);
     }
 
     @Value("${default-header}")

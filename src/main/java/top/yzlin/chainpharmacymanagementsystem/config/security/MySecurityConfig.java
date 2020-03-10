@@ -30,7 +30,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         //定制请求的授权规则
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/cpms/**").hasAnyRole("ADMIN", "WAREHOUSE_KEEPER")
+                .antMatchers("/cpms/**").hasAnyRole("ADMIN", "WAREHOUSE_KEEPER", "SALESMAN", "SHOP_MANAGER")
                 .and()
                 //登录配置
                 .formLogin().loginPage("/login.html").loginProcessingUrl("/api/user/login")
